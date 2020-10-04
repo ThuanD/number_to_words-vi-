@@ -17,18 +17,23 @@ def write_small_number(number):
 def write_number(number):
     """ number > 10^9 """
     result = ""
-    unit = " tỉ"
+    unit = " tỷ"
     leng_number = len(str(number))
+    # chia thành 9 chữ số 1 cụm, tính từ phải sang trái
     index = leng_number // 9
     if leng_number % 9 == 0:
         index = index -1
-    number_process = number
     while (index >= 0):
-        begin_number = number_process // (10**(index*9))
+        # những chứ số đầu tiên
+        begin_number = number // (10**(index*9))
         if begin_number % 10**9 != 0:
-            if index == 0 and begin_number == 1:
+            if index == 0 and begin_number < 10:
+                # 9 chữ số cuối cùng là 00000000X
                 result += "lẻ "
-            result += write_small_number(begin_number) + index * unit + " "
-        number_process = number_process - begin_number * (10**(index*9))
+            if index == 0:
+                result += write_small_number(begin_number) + index * unit
+            elif index != 0:
+                result += write_small_number(begin_number) + index * unit + ", "
+        number = number - begin_number * (10**(index*9))
         index -= 1
     return result
